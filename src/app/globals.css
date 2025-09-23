@@ -60,4 +60,14 @@ body {
   height:202px;
   width:327px
 }
+
+.info-tags {
+
+  border:0.6px solid var(--stroke);
+ background-color: var(--foreground);
+  border-radius: 88px;
+  padding: 8px 12px  ;
+  width: fit-content;
+ 
+}
 }

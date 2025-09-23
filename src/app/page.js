@@ -1,6 +1,7 @@
 import Image from "next/image";
 import FilterNavBar from "./components/FilterNavBar";
 import FilterByFood from "./components/FilterByFood";
+import RestaurantCards from "./components/RestaurantCards";
 
 export default function Home() {
   return (
@@ -18,15 +19,7 @@ export default function Home() {
         <FilterNavBar />
         <div className="w-5/6 flex flex-col">
         <FilterByFood />
-        <section className=" h-full" >
-           <h2 className="text-4xl pt-10 pb-8">Restaurant`s</h2>
-          <div className=" flex w-full h-full gap-4 flex-wrap justify-center">
-            <h3 className="card-style restaurant-card">Food Card</h3>
-            <h3 className="card-style restaurant-card">Food Card</h3>
-            <h3 className="card-style restaurant-card">Food Card</h3>
-             <h3 className="card-style restaurant-card">Food Card</h3>
-          </div>
-          </section>
+        <RestaurantCards />
           </div>
       </div>
 
