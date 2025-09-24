@@ -2,9 +2,9 @@ import Image from "next/image"
 
 export default function RestaurantCards() {
     return (
-        <section className=" h-full" >
+        <section className=" h-full " >
             <h2 className="text-4xl pt-10 pb-8">Restaurant`s</h2>
-            <div className=" flex w-full gap-4 flex-wrap">
+            <div className=" flex w-full gap-4 flex-wrap overflow-y-auto overflow-y-hidden">
                 <div className="flex flex-col justify-between card-style restaurant-card">
                     <div className="flex gap-2">
                         <p className="info-tags">Status</p>
