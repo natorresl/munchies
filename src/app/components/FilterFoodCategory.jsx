@@ -1,12 +1,10 @@
 import Image from "next/image"
 
-
 export default async function FilterFoodCategory() {
 
      const data = await fetch('https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/filter')
  const response = await data.json()
  const filters = response.filters
- console.log(filters)
 
   return ( 
 
