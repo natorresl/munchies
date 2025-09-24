@@ -1,6 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
+const sfPro = localFont({
+  src: "../../public/fonts/SF-Pro.ttf",
+  variable: "--font-sf-pro",
+ 
+});
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -20,7 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${sfPro.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>

@@ -15,7 +15,7 @@ export default function RestaurantCards() {
                         <button>
                             <Image
                                 src="/img/button-arrow-green.png"
-                                alt="Heart Icon"
+                                alt="Arrow Icon"
                                 width={32}
                                 height={32}
                             />

@@ -8,7 +8,7 @@ export default function Home() {
  <div className="min-h-screen p-10 sm:p-10
                     items-center ">
                       <Image
-          src="/img/munchies-logo.png"
+          src="/images/munchies-logo.png"
           alt="Munchies Logo"
           width={250}
           height={40}
