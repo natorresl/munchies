@@ -76,8 +76,7 @@ export default function Home() {
   console.log("price range all:", priceRange);
 
   return (
-    <div className="min-h-screen h-screen py-10 pl-10 sm:py-10 sm:pl-10 max-w-[1440px]
-                    items-center ">
+    <div className="min-h-screen h-screen py-10 pl-10 sm:py-10 sm:pl-10 max-w-[1440px] items-center ">
       <Image
         src="/images/munchies-logo.png"
         alt="Munchies Logo"
