@@ -2,9 +2,33 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function FilterFoodCategory() {
   const [filters, setFilters] = useState([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const selectedCategories =
+    searchParams
+      .get("category")
+      ?.split(",")
+      .map((c) => c.toLowerCase()) || [];
+
+  const handleCategoryClick = (category) => {
+    const params = new URLSearchParams(searchParams.toString());
+    let categories = params.get("category")?.split(",") || [];
+    if (categories.includes(category)) {
+      categories = categories.filter((c) => c !== category);
+    } else {
+      categories.push(category);
+    }
+    categories.length > 0
+      ? params.set("category", categories.join(","))
+      : params.delete("category");
+    router.push(`/?${params.toString()}`);
+  };
+
   useEffect(() => {
     async function fetchData() {
       const dataFilters = await fetch(
@@ -22,7 +46,12 @@ export default function FilterFoodCategory() {
         {filters.map((filter) => (
           <button
             key={filter.id}
-            className="card-style min-w-40 w-40 h-full flex gap-2 justify-between relative cursor-pointer"
+            className={` card-style min-w-40 w-40 h-full flex gap-2 justify-between relative cursor-pointer ${
+              selectedCategories.includes(filter.name.toLowerCase())
+                ? "bg-[var(--green)] text-white"
+                : ""
+            }`}
+            onClick={() => handleCategoryClick(filter.name.toLowerCase())}
           >
             <h3 className="pt-4 pl-3">{filter.name}</h3>
             <Image

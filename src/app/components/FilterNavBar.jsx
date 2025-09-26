@@ -7,6 +7,7 @@ export default function FilterNavBar() {
   const [filters, setFilters] = useState([]);
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const selectedCategories =
     searchParams
       .get("category")
@@ -21,13 +22,9 @@ export default function FilterNavBar() {
     } else {
       categories.push(category);
     }
-
-    if (categories.length > 0) {
-      params.set("category", categories.join(","));
-    } else {
-      params.delete("category");
-    }
-
+    categories.length > 0
+      ? params.set("category", categories.join(","))
+      : params.delete("category");
     router.push(`/?${params.toString()}`);
   };
 
