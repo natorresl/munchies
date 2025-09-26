@@ -20,9 +20,19 @@ body {
   color: var(--text);
   font-family: var(--font-sf-pro), Arial, Helvetica, sans-serif;
   font-size: 12px;
+  line-height: 0.9375rem;
+  letter-spacing: -0.03125rem;
+}
+h1 {
+  font-size: 1.5rem;
 }
 
 @layer components {
+  .subtitle {
+    font-size: 0.75rem;
+    font-weight: 590;
+    color: #0000007a;
+  }
   .card-style {
     border: 0.6px solid var(--stroke);
     background-color: var(--foreground);

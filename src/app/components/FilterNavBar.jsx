@@ -85,9 +85,7 @@ export default function FilterNavBar() {
     <nav className="w-1/6 card-style px-6 py-4 flex flex-col min-w-36 w-60">
       <h2 className=" text-2xl">Filter</h2>
 
-      <h3 className="text-xs text-gray-400 tex-bold mt-8 mb-4">
-        FOOD CATEGORY
-      </h3>
+      <h3 className="subtitle mt-8 mb-4">FOOD CATEGORY</h3>
       <ul className="flex flex-col gap-2 ">
         {filters.slice(0, 4).map((filter) => (
           <button
@@ -103,9 +101,7 @@ export default function FilterNavBar() {
           </button>
         ))}
       </ul>
-      <h3 className="text-xs text-gray-400 tex-bold mt-8 mb-4">
-        DELIVERY TIME
-      </h3>
+      <h3 className="subtitle mt-8 mb-4">DELIVERY TIME</h3>
       <ul className="flex flex-wrap gap-2">
         {["0-10 min", "10-30 min", "30-60 min", "1 hour+"].map((range) => (
           <button
@@ -121,7 +117,7 @@ export default function FilterNavBar() {
           </button>
         ))}
       </ul>
-      <h3 className="text-xs text-gray-400 tex-bold mt-8 mb-4">PRICE RANGE</h3>
+      <h3 className="subtitle mt-8 mb-4">PRICE RANGE</h3>
       <ul className="flex flex-wrap gap-2 ">
         {["$", "$$", "$$$", "$$$$"].map((price) => (
           <button

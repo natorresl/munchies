@@ -94,12 +94,6 @@ export default function Home() {
     return categoryOk && deliveryOk && priceOk;
   });
 
-
-  console.log("restaurants:", restaurants);
-  console.log("statusMap:", statusMap);
-  console.log("priceRange:", priceRange);
-  console.log("categories (fetched):", categoryFilters);
-
   return (
     <div className="min-h-screen h-screen py-10 pl-10 sm:py-10 sm:pl-10 max-w-[1440px] items-center ">
       <Image

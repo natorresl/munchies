@@ -46,7 +46,7 @@ export default function FilterFoodCategory() {
         {filters.map((filter) => (
           <button
             key={filter.id}
-            className={` card-style min-w-40 w-40 h-full flex gap-2 justify-between relative cursor-pointer ${
+            className={` card-style min-w-40 w-40 h-full flex gap-2 justify-between relative cursor-pointer hover:bg-[var(--green)] hover:text-white ${
               selectedCategories.includes(filter.name.toLowerCase())
                 ? "bg-[var(--green)] text-white"
                 : ""
