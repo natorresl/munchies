@@ -1,5 +1,7 @@
 "use client"
 
+import { useSearchParams } from "next/navigation";
+
 import Image from "next/image";
 import FilterNavBar from "./components/FilterNavBar";
 import FilterFoodCategory from "./components/FilterFoodCategory";
@@ -13,6 +15,8 @@ export default function Home() {
   const [priceRangeIds, setPriceRangeId] = useState([]);
   const [priceRange, setPriceRange] = useState([]);
   const [statusMap, setStatusMap] = useState({});
+
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     async function fetchData() {
@@ -71,6 +75,41 @@ export default function Home() {
     fetchData();
   }, []);
 
+   function getCategoryFromImage(url) {
+  if (!url) return "";
+  return url.split("/").pop().replace(".png", ""); 
+
+}
+const categories = searchParams.get("category")?.split(",") || [];
+const deliveries = searchParams.get("delivery")?.split(",") || [];
+const prices = searchParams.get("price")?.split(",") || [];
+
+  function getDeliveryRange(minutes) {
+  if (minutes <= 10) return "0-10 min";
+  if (minutes <= 30) return "10-30 min";
+  if (minutes <= 60) return "30-60 min";
+  return "1 hour+";
+}
+
+const priceRangeMap = {};
+priceRange.forEach((p) => {
+  priceRangeMap[p.id] = p.range;
+});
+
+const filteredRestaurants = restaurants.filter(r => {
+  const categoryOk =
+    categories.length === 0 ||
+    categories.includes(getCategoryFromImage(r.image_url).toLowerCase());
+
+  const deliveryOk =
+    deliveries.length === 0 ||
+    deliveries.includes(getDeliveryRange(r.delivery_time_minutes));
+
+    const priceOk =
+  prices.length === 0 || prices.includes(priceRangeMap[r.price_range_id] || "");
+  return categoryOk && deliveryOk && priceOk;
+});
+
   console.log(restaurants);
   console.log("status all:", statusMap);
   console.log("price range all:", priceRange);
@@ -91,7 +130,7 @@ export default function Home() {
         <div className="w-5/6 flex flex-col">
           <FilterFoodCategory />
           <RestaurantCards 
-          restaurants={restaurants}
+          restaurants={filteredRestaurants}
           status={statusMap}
           priceRanges={priceRange}/>
         </div>
