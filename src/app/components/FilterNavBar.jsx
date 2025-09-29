@@ -82,11 +82,13 @@ export default function FilterNavBar() {
   }, []);
 
   return (
-    <nav className="w-1/6 card-style px-6 py-4 flex flex-col min-w-36 w-60">
-      <h2 className=" text-2xl">Filter</h2>
+    <nav className=" pt-0 py-4 flex flex-col sm:min-w-36 sm:w-60 sm:px-6 sm:w-1/6 card-style-nav sm:h-full">
+      <h2 className="hidden sm:block sm:pt-6 text-2xl">Filter</h2>
 
-      <h3 className="subtitle mt-8 mb-4">FOOD CATEGORY</h3>
-      <ul className="flex flex-col gap-2 ">
+      <h3 className="sm:block hidden subtitle mt-8 mb-4 uppercase">
+        food category
+      </h3>
+      <ul className=" sm:flex hidden flex-col gap-2 ">
         {filters.slice(0, 4).map((filter) => (
           <button
             key={filter.id}
@@ -101,13 +103,15 @@ export default function FilterNavBar() {
           </button>
         ))}
       </ul>
-      <h3 className="subtitle mt-8 mb-4">DELIVERY TIME</h3>
-      <ul className="flex flex-wrap gap-2">
+      <h3 className="subtitle sm:mt-8 sm:mb-4 mb-2.5 uppercase">
+        delivery time
+      </h3>
+      <ul className="flex  sm:flex-wrap gap-2">
         {["0-10 min", "10-30 min", "30-60 min", "1 hour+"].map((range) => (
           <button
             key={range}
             onClick={() => handleDeliveryClick(range)}
-            className={`button-style transition-colors ${
+            className={`button-style transition-colors gap-2 ${
               selectedDelivery.includes(range)
                 ? "bg-[var(--green)] text-white"
                 : ""
@@ -117,8 +121,10 @@ export default function FilterNavBar() {
           </button>
         ))}
       </ul>
-      <h3 className="subtitle mt-8 mb-4">PRICE RANGE</h3>
-      <ul className="flex flex-wrap gap-2 ">
+      <h3 className="sm:block hidden subtitle mt-8 mb-4 uppercase">
+        price range
+      </h3>
+      <ul className=" hidden sm:flex flex-wrap gap-2 ">
         {["$", "$$", "$$$", "$$$$"].map((price) => (
           <button
             key={price}

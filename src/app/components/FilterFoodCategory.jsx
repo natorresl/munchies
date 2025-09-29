@@ -41,8 +41,8 @@ export default function FilterFoodCategory() {
   }, []);
   console.log(filters);
   return (
-    <section className="flex h-20 min-h-20 w-full gap-2.5 items-center overflow-x-auto  text-sm">
-      <ul className="flex h-20 min-h-20 w-full gap-2.5 items-center overflow-x-auto  text-sm">
+    <nav className="flex h-20 min-h-20 w-full gap-2.5 items-center overflow-x-scroll  text-sm ">
+      <ul className="flex h-20 min-h-20 w-full gap-2.5 items-center">
         {filters.map((filter) => (
           <button
             key={filter.id}
@@ -64,6 +64,6 @@ export default function FilterFoodCategory() {
           </button>
         ))}
       </ul>
-    </section>
+    </nav>
   );
 }

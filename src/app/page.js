@@ -11,18 +11,18 @@ export default function Home() {
   const [restaurants, setRestaurants] = useState([]);
   const [priceRange, setPriceRange] = useState([]);
   const [statusMap, setStatusMap] = useState({});
-  const [categoryFilters, setCategoryFilters] = useState([]); // renamed
+  const [categoryFilters, setCategoryFilters] = useState([]); 
 
   const searchParams = useSearchParams();
 
   useEffect(() => {
     async function fetchData() {
-      // restaurants
+      // Restaurants
       const res = await fetch("https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/restaurants");
       const { restaurants: restaurantsArray } = await res.json();
       setRestaurants(restaurantsArray);
 
-      // STATUS
+      // Status
       const statusResults = await Promise.all(
         restaurantsArray.map(async (r) => {
           const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/open/${r.id}`);
@@ -34,17 +34,17 @@ export default function Home() {
       statusResults.forEach(({ id, is_open }) => (statusMap[id] = is_open));
       setStatusMap(statusMap);
 
-      // PRICE ranges
-      const uniquePriceIds = [...new Set(restaurantsArray.map(r => r.price_range_id))];
+      // Price ranges
+      const priceIds = [...new Set(restaurantsArray.map(r => r.price_range_id))];
       const priceRangeResults = await Promise.all(
-        uniquePriceIds.map(async (id) => {
+        priceIds.map(async (id) => {
           const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/price-range/${id}`);
           return res.json();
         })
       );
       setPriceRange(priceRangeResults);
 
-      // CATEGORIES (filters by id)
+      // Categories (filters by id)
       const allFilterIds = restaurantsArray.flatMap(r => r.filter_ids || []);
       const uniqueFilterIds = [...new Set(allFilterIds)];
       const filterResults = await Promise.all(
@@ -71,9 +71,6 @@ export default function Home() {
   }
 
 
-  const priceRangeMap = {};
-  priceRange.forEach((p) => { priceRangeMap[p.id] = p.range; });
-
   const filterMap = {};
   categoryFilters.forEach(f => { filterMap[f.id] = f.name.toLowerCase(); });
 
@@ -95,25 +92,25 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen h-screen py-10 pl-10 sm:py-10 sm:pl-10 max-w-[1440px] items-center ">
+    <main className="min-h-screen h-screen py-10 pl-6 overflow-y-hidden sm:pl-10 sm:py-10 sm:pl-10 max-w-[1440px] items-center ">
       <Image
         src="/images/munchies-logo.png"
         alt="Munchies Logo"
         width={250}
         height={40}
-        className="mb-12"
+        className="mb-6 sm:mb-12 w-41 sm:62 "
       />
-      <div className="flex h-full w-full gap-5 ">
+      <div className="sm:flex h-full w-full gap-5 ">
         <FilterNavBar filters={categoryFilters}/>
-        <div className="w-5/6 flex flex-col">
+        <div className="sm:w-5/6 h-full flex flex-col">
           <FilterFoodCategory />
           <RestaurantCards 
             restaurants={filteredRestaurants}
             status={statusMap}
-            priceRanges={priceRange}
+        
           />
         </div>
       </div>
-    </div>
+    </main>
   );
 }

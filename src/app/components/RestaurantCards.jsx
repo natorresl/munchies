@@ -1,11 +1,6 @@
 import Image from "next/image";
 
-export default function RestaurantCards({ restaurants, status, priceRanges }) {
-  const priceRangeMap = {};
-  priceRanges.forEach(({ id, range }) => {
-    priceRangeMap[id] = range;
-  });
-
+export default function RestaurantCards({ restaurants, status }) {
   function getDeliveryRange(minutes) {
     if (minutes <= 10) return "0-10 min";
     if (minutes <= 30) return "10-30 min";
@@ -14,13 +9,15 @@ export default function RestaurantCards({ restaurants, status, priceRanges }) {
   }
 
   return (
-    <section className=" h-full ">
-      <h2 className="text-4xl pt-10 pb-8">Restaurant’s</h2>
-      <div className=" flex w-full gap-4 flex-wrap overflow-y-auto overflow-y-hidden">
+    <section className=" h-screen flex flex-col ">
+      <h2 className="text-xl pt-6 pb-5  sm:text-4xl sm:pt-10 sm:pb-8 ">
+        Restaurant’s
+      </h2>
+      <div className=" flex w-full gap-4 flex-wrap overflow-y-scroll h-full pb-70">
         {restaurants.map((restaurant) => (
           <div
             key={restaurant.id}
-            className="relative flex flex-col justify-between card-style restaurant-card overflow-hidden"
+            className="relative flex flex-col justify-between card-style restaurant-card overflow-hidden z-10"
           >
             <Image
               src={restaurant.image_url}
@@ -30,21 +27,25 @@ export default function RestaurantCards({ restaurants, status, priceRanges }) {
               className="absolute left-54 bottom-23 rounded-lg object-cover z-10"
             />
             {!status[restaurant.id] && (
-              <div className="absolute inset-0 closedStatus z-40 flex items-center justify-center">
-                <span className=" closedSpan ">Opens tomorrow at 12 pm</span>
-              </div>
+              <span className="absolute inset-0 closed-status z-20 flex items-center justify-center">
+                <p className=" closed-span ">Opens tomorrow at 12 pm</p>
+              </span>
             )}
-            <div className="relative z-30 flex flex-col h-full justify-between">
+            <div className="relative  flex flex-col h-full justify-between">
               <div className="flex gap-2 ">
-                <p className="info-tags flex items-center gap-2 ">
-                  <span
+                <span className="info-tags flex items-center gap-2 z-30">
+                  <p
                     className={`inline-block w-2 h-2 rounded-full ${
                       status[restaurant.id] ? "bg-[var(--green)]" : "bg-black"
                     }`}
                   />
                   {status[restaurant.id] ? "Open" : "Closed"}
-                </p>
-                <p className="info-tags">
+                </span>
+                <p
+                  className={`info-tags ${
+                    status[restaurant.id] ? "" : "hidden"
+                  }`}
+                >
                   {getDeliveryRange(restaurant.delivery_time_minutes)}
                 </p>
               </div>
