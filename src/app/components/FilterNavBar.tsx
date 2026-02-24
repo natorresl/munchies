@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Filter } from "../types";
 
-export default function FilterNavBar() {
- const [filters, setFilters] = useState<Filter[]>([]);
+export default function FilterNavBar({ filters }: { filters: Filter[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -70,17 +68,6 @@ export default function FilterNavBar() {
     router.push(`/?${params.toString()}`);
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      const dataFilters = await fetch(
-        "https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/filter"
-      );
-
-      const filterJson = await dataFilters.json();
-      setFilters(filterJson.filters);
-    }
-    fetchData();
-  }, []);
 
   return (
     <nav className=" pt-0 py-4 flex flex-col sm:min-w-36 sm:w-60 sm:px-6 sm:w-1/6 card-style-nav sm:h-full">
