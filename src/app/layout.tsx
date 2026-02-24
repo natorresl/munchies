@@ -2,6 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
+interface RootLayoutProps {  children: React.ReactNode;
+}
+
 const sfPro = localFont({
   src: "../../public/fonts/SF-Pro.ttf",
   variable: "--font-sf-pro",
@@ -22,7 +25,7 @@ export const metadata = {
   description: "A food delivery app",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body

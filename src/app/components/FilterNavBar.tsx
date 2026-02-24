@@ -2,19 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Filter } from "../types";
 
 export default function FilterNavBar() {
-  const [filters, setFilters] = useState([]);
+ const [filters, setFilters] = useState<Filter[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const selectedCategories =
+  const selectedCategories: string[] =
     searchParams
       .get("category")
       ?.split(",")
       .map((c) => c.toLowerCase()) || [];
 
-  const handleCategoryClick = (category) => {
+  const handleCategoryClick = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
     let categories = params.get("category")?.split(",") || [];
     if (categories.includes(category)) {
@@ -28,9 +29,9 @@ export default function FilterNavBar() {
     router.push(`/?${params.toString()}`);
   };
 
-  const selectedDelivery = searchParams.get("delivery")?.split(",") || [];
+  const selectedDelivery: string[] = searchParams.get("delivery")?.split(",") || [];
 
-  const handleDeliveryClick = (range) => {
+  const handleDeliveryClick = (range: string) => {
     const params = new URLSearchParams(searchParams.toString());
     let deliveries = params.get("delivery")?.split(",") || [];
 
@@ -48,9 +49,9 @@ export default function FilterNavBar() {
 
     router.push(`/?${params.toString()}`);
   };
-  const selectedPrice = searchParams.get("price")?.split(",") || [];
+  const selectedPrice: string[] = searchParams.get("price")?.split(",") || [];
 
-  const handlePriceClick = (price) => {
+  const handlePriceClick = (price: string) => {
     const params = new URLSearchParams(searchParams.toString());
     let prices = params.get("price")?.split(",") || [];
 

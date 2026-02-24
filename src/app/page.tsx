@@ -6,12 +6,13 @@ import FilterNavBar from "./components/FilterNavBar";
 import FilterFoodCategory from "./components/FilterFoodCategory";
 import RestaurantCards from "./components/RestaurantCards";
 import { useEffect, useState } from "react";
+import { PriceRange, Filter, Restaurant } from "./types";
 
 export default function Home() {
-  const [restaurants, setRestaurants] = useState([]);
-  const [priceRange, setPriceRange] = useState([]);
-  const [statusMap, setStatusMap] = useState({});
-  const [categoryFilters, setCategoryFilters] = useState([]); 
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [priceRange, setPriceRange] = useState<PriceRange[]>([]);
+  const [statusMap, setStatusMap] = useState<Record<number, boolean>>({});
+  const [categoryFilters, setCategoryFilters] = useState<Filter[]>([]);
 
   const searchParams = useSearchParams();
 
@@ -24,18 +25,18 @@ export default function Home() {
 
       // Status
       const statusResults = await Promise.all(
-        restaurantsArray.map(async (r) => {
+        restaurantsArray.map(async (r: Restaurant) => {
           const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/open/${r.id}`);
           const data = await res.json();
           return { id: r.id, ...data };
         })
       );
-      const statusMap = {};
+      const statusMap: Record<number, boolean> = {};
       statusResults.forEach(({ id, is_open }) => (statusMap[id] = is_open));
       setStatusMap(statusMap);
 
       // Price ranges
-      const priceIds = [...new Set(restaurantsArray.map(r => r.price_range_id))];
+      const priceIds = [...new Set(restaurantsArray.map((r: Restaurant) => r.price_range_id))];
       const priceRangeResults = await Promise.all(
         priceIds.map(async (id) => {
           const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/price-range/${id}`);
@@ -45,15 +46,15 @@ export default function Home() {
       setPriceRange(priceRangeResults);
 
       // Categories (filters by id)
-      const allFilterIds = restaurantsArray.flatMap(r => r.filter_ids || []);
-      const uniqueFilterIds = [...new Set(allFilterIds)];
-      const filterResults = await Promise.all(
-        uniqueFilterIds.map(async (id) => {
-          const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/filter/${id}`);
-          return res.json(); 
-        })
-      );
-      setCategoryFilters(filterResults);
+            const allFilterIds: number[] = restaurantsArray.flatMap((r: Restaurant) => r.filter_ids || []);
+            const uniqueFilterIds = Array.from(new Set(allFilterIds)) as number[];
+            const filterResults = await Promise.all(
+              uniqueFilterIds.map(async (id: number) => {
+                const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/filter/${id}`);
+                return res.json(); 
+              })
+            );
+            setCategoryFilters(filterResults);
     }
     fetchData();
   }, []);
@@ -63,7 +64,7 @@ export default function Home() {
   const selectedPrices = searchParams.get("price")?.split(",") || [];
 
 
-  function getDeliveryRange(minutes) {
+  function getDeliveryRange(minutes: number) {
     if (minutes <= 10) return "0-10 min";
     if (minutes <= 30) return "10-30 min";
     if (minutes <= 60) return "30-60 min";
@@ -71,7 +72,7 @@ export default function Home() {
   }
 
 
-  const filterMap = {};
+  const filterMap: Record<number, string> = {};
   categoryFilters.forEach(f => { filterMap[f.id] = f.name.toLowerCase(); });
 
 
@@ -83,6 +84,9 @@ export default function Home() {
     const deliveryOk =
       selectedDeliveries.length === 0 ||
       selectedDeliveries.includes(getDeliveryRange(r.delivery_time_minutes));
+
+    const priceRangeMap: Record<number, string> = {};
+    priceRange.forEach(p => { priceRangeMap[p.id] = p.name.toLowerCase(); });
 
     const priceOk =
       selectedPrices.length === 0 ||
@@ -101,13 +105,12 @@ export default function Home() {
         className="mb-6 sm:mb-12 w-41 sm:62 "
       />
       <div className="sm:flex h-full w-full gap-5 ">
-        <FilterNavBar filters={categoryFilters}/>
+        <FilterNavBar />
         <div className="sm:w-5/6 h-full flex flex-col">
           <FilterFoodCategory />
           <RestaurantCards 
             restaurants={filteredRestaurants}
             status={statusMap}
-        
           />
         </div>
       </div>

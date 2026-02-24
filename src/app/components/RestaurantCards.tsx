@@ -1,7 +1,8 @@
 import Image from "next/image";
+import { Restaurant } from "../types";
 
-export default function RestaurantCards({ restaurants, status }) {
-  function getDeliveryRange(minutes) {
+export default function RestaurantCards({ restaurants, status }: { restaurants: Restaurant[]; status: Record<number, boolean> }) {
+  function getDeliveryRange(minutes: number) {
     if (minutes <= 10) return "0-10 min";
     if (minutes <= 30) return "10-30 min";
     if (minutes <= 60) return "30-60 min";
