@@ -1,92 +1,90 @@
-"use client"
-
-import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import FilterNavBar from "./components/FilterNavBar";
 import FilterFoodCategory from "./components/FilterFoodCategory";
 import RestaurantCards from "./components/RestaurantCards";
-import { useEffect, useState } from "react";
-import { PriceRange, Filter, Restaurant } from "./types";
-
-export default function Home() {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [priceRange, setPriceRange] = useState<PriceRange[]>([]);
-  const [statusMap, setStatusMap] = useState<Record<number, boolean>>({});
-  const [categoryFilters, setCategoryFilters] = useState<Filter[]>([]);
-
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    async function fetchData() {
-      // Restaurants
-      const res = await fetch("https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/restaurants");
-      const { restaurants: restaurantsArray } = await res.json();
-      setRestaurants(restaurantsArray);
-
-      // Status
-      const statusResults = await Promise.all(
-        restaurantsArray.map(async (r: Restaurant) => {
-          const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/open/${r.id}`);
-          const data = await res.json();
-          return { id: r.id, ...data };
-        })
-      );
-      const statusMap: Record<number, boolean> = {};
-      statusResults.forEach(({ id, is_open }) => (statusMap[id] = is_open));
-      setStatusMap(statusMap);
-
-      // Price ranges
-      const priceIds = [...new Set(restaurantsArray.map((r: Restaurant) => r.price_range_id))];
-      const priceRangeResults = await Promise.all(
-        priceIds.map(async (id) => {
-          const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/price-range/${id}`);
-          return res.json();
-        })
-      );
-      setPriceRange(priceRangeResults);
-
-      // Categories (filters by id)
-            const allFilterIds: number[] = restaurantsArray.flatMap((r: Restaurant) => r.filter_ids || []);
-            const uniqueFilterIds = Array.from(new Set(allFilterIds)) as number[];
-            const filterResults = await Promise.all(
-              uniqueFilterIds.map(async (id: number) => {
-                const res = await fetch(`https://work-test-web-2024-eze6j4scpq-lz.a.run.app/api/filter/${id}`);
-                return res.json(); 
-              })
-            );
-            setCategoryFilters(filterResults);
-    }
-    fetchData();
-  }, []);
-
-  const selectedCategories = searchParams.get("category")?.split(",") || [];
-  const selectedDeliveries = searchParams.get("delivery")?.split(",") || [];
-  const selectedPrices = searchParams.get("price")?.split(",") || [];
+import { PriceRange, Filter } from "./types";
+import {
+  fetchRestaurants,
+  fetchOpenStatus,
+  fetchPriceRange,
+  fetchAllFilters,
+} from "./lib/api";
 
 
-  function getDeliveryRange(minutes: number) {
-    if (minutes <= 10) return "0-10 min";
-    if (minutes <= 30) return "10-30 min";
-    if (minutes <= 60) return "30-60 min";
-    return "1 hour+";
-  }
+function getDeliveryRange(minutes: number): string {
+  if (minutes <= 10) return "0-10 min";
+  if (minutes <= 30) return "10-30 min";
+  if (minutes <= 60) return "30-60 min";
+  return "1 hour+";
+}
 
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function Home({ searchParams }: PageProps) {
+  const resolvedParams = await searchParams;
+
+  // Parallel fetch: restaurants + filters
+  const [restaurants, filters] = await Promise.all([
+    fetchRestaurants(),
+    fetchAllFilters(),
+  ]);
+
+  // Parallel fetch: open status per restaurant + price ranges for unique IDs
+  const uniquePriceRangeIds = [
+    ...new Set(restaurants.map((r) => r.price_range_id)),
+  ];
+
+  const [statusResults, priceRanges] = await Promise.all([
+    Promise.all(
+      restaurants.map(async (r) => {
+        const data = await fetchOpenStatus(r.id);
+        return { id: r.id, is_open: data.is_open };
+      })
+    ),
+    Promise.all(uniquePriceRangeIds.map((id) => fetchPriceRange(id))),
+  ]);
+
+  // Build lookup maps
+  const statusMap: Record<number, boolean> = {};
+  statusResults.forEach(({ id, is_open }) => {
+    statusMap[id] = is_open;
+  });
 
   const filterMap: Record<number, string> = {};
-  categoryFilters.forEach(f => { filterMap[f.id] = f.name.toLowerCase(); });
+  filters.forEach((f: Filter) => {
+    filterMap[f.id] = f.name.toLowerCase();
+  });
 
+  const priceRangeMap: Record<number, string> = {};
+  priceRanges.forEach((p: PriceRange) => {
+    priceRangeMap[p.id] = p.name.toLowerCase();
+  });
 
-  const filteredRestaurants = restaurants.filter(r => {
+  // Extract filter criteria from searchParams
+  const categoryParam =
+    typeof resolvedParams.category === "string" ? resolvedParams.category : "";
+  const deliveryParam =
+    typeof resolvedParams.delivery === "string" ? resolvedParams.delivery : "";
+  const priceParam =
+    typeof resolvedParams.price === "string" ? resolvedParams.price : "";
+
+  const selectedCategories = categoryParam ? categoryParam.split(",") : [];
+  const selectedDeliveries = deliveryParam ? deliveryParam.split(",") : [];
+  const selectedPrices = priceParam ? priceParam.split(",") : [];
+
+  // Filter restaurants server-side
+  const filteredRestaurants = restaurants.filter((r) => {
     const categoryOk =
       selectedCategories.length === 0 ||
-      r.filter_ids.some(fid => selectedCategories.includes(filterMap[fid]));
+      r.filter_ids.some((fid) =>
+        selectedCategories.includes(filterMap[fid])
+      );
 
     const deliveryOk =
       selectedDeliveries.length === 0 ||
       selectedDeliveries.includes(getDeliveryRange(r.delivery_time_minutes));
-
-    const priceRangeMap: Record<number, string> = {};
-    priceRange.forEach(p => { priceRangeMap[p.id] = p.name.toLowerCase(); });
 
     const priceOk =
       selectedPrices.length === 0 ||
@@ -105,9 +103,9 @@ export default function Home() {
         className="mb-6 sm:mb-12 w-41 sm:62 "
       />
       <div className="sm:flex h-full w-full gap-5 ">
-        <FilterNavBar />
+        <FilterNavBar filters={filters} />
         <div className="sm:w-5/6 h-full flex flex-col">
-          <FilterFoodCategory />
+          <FilterFoodCategory filters={filters} />
           <RestaurantCards 
             restaurants={filteredRestaurants}
             status={statusMap}
