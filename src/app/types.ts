@@ -1,6 +1,6 @@
 export interface PriceRange {
   id: number;
-  name: string;
+  range: string;
 }
 
 export interface Filter {

@@ -59,7 +59,7 @@ export default async function Home({ searchParams }: PageProps) {
 
   const priceRangeMap: Record<number, string> = {};
   priceRanges.forEach((p: PriceRange) => {
-    priceRangeMap[p.id] = p.name.toLowerCase();
+    priceRangeMap[p.id] = p.range.toLowerCase();
   });
 
   // Extract filter criteria from searchParams
@@ -100,7 +100,7 @@ export default async function Home({ searchParams }: PageProps) {
         alt="Munchies Logo"
         width={250}
         height={40}
-        className="mb-6 sm:mb-12 w-41 sm:62 "
+        className="mb-6 sm:mb-12 w-41 sm:62 dark:invert"
       />
       <div className="sm:flex h-full w-full gap-5 ">
         <FilterNavBar filters={filters} />
