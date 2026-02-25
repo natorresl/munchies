@@ -55,7 +55,7 @@ export default function RestaurantCards({ restaurants, status }: { restaurants: 
                 <h3 className="text-2xl">{restaurant.name}</h3>
                 <button>
                   <Image
-                    src="/img/button-arrow-green.png"
+                    src="/images/button-arrow-green.png"
                     alt="Arrow Icon"
                     width={32}
                     height={32}
