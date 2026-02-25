@@ -15,7 +15,7 @@ export default function RestaurantCard({ restaurant, isOpen }: { restaurant: Res
     >
       <Image
         src={restaurant.image_url}
-        alt={restaurant.name}
+        alt={`Animated image of the type of restaurant: ${restaurant.name}`}
         width={140}
         height={140}
         className="absolute left-54 bottom-23 rounded-lg object-cover z-10"

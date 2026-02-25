@@ -22,17 +22,18 @@ export default function FilterSection({
       <h3 className={titleClassName}>{title}</h3>
       <ul className={className}>
         {items.map(({ label, value }) => (
-          <button
-            key={value}
-            onClick={() => onToggle(value)}
-            className={`button-style transition-colors ${buttonClassName} ${
-              selected.includes(value)
-                ? "bg-[var(--green)] text-white"
-                : ""
-            }`}
-          >
-            {label}
-          </button>
+          <li key={value}>
+            <button
+              onClick={() => onToggle(value)}
+              className={`button-style transition-colors ${buttonClassName} ${
+                selected.includes(value)
+                  ? "bg-[var(--green)] text-white"
+                  : ""
+              }`}
+            >
+              {label}
+            </button>
+          </li>
         ))}
       </ul>
     </>

@@ -1,101 +1,107 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #fafafa;
-  --foreground: #ffffff;
-  --text: #000000;
-  --green: #00703a;
-  --stroke: #0000001d;
-  --subtitle-text: #0000007a;
-  --closed-status-background-color: #ffffffc3;
+	--background: #fafafa;
+	--foreground: #ffffff;
+	--text: #000000;
+	--green: #00703a;
+	--stroke: #0000001d;
+	--subtitle-text: #0000007a;
+	--closed-status-background-color: #ffffffc3;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #373737;
-    --text: #ffffff;
-    --stroke: #ffffff50;
-    --subtitle-text: #f3f3f37a;
-    --closed-status-background-color: #0f0e0ec3;
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: #373737;
+		--text: #ffffff;
+		--stroke: #ffffff50;
+		--subtitle-text: #f3f3f3d2;
+		--closed-status-background-color: #0f0e0ec3;
+	}
 }
 
 body {
-  background: var(--background);
-  color: var(--text);
-  font-family: var(--font-sf-pro), Arial, Helvetica, sans-serif;
-  font-size: 12px;
-  line-height: 0.9375rem;
-  letter-spacing: -0.03125rem;
+	background: var(--background);
+	color: var(--text);
+	font-family: var(--font-sf-pro), Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 0.9375rem;
+	letter-spacing: -0.03125rem;
 }
 
 @layer components {
-  .subtitle {
-    font-size: 0.75rem;
-    font-weight: 590;
-    color: var(--subtitle-text);
-  }
-  .card-style {
-    border: 0.6px solid var(--stroke);
-    background-color: var(--foreground);
-    border-radius: 10px;
-    box-shadow: -4px 2px 10px rgba(0, 0, 0, 0.01);
-    transition: background-color 0.3s, color 0.3s;
-  }
-  .button-style {
-    border: 0.6px solid var(--stroke);
-    background-color: var(--foreground);
-    border-radius: 8px;
-    cursor: pointer;
-    padding: 8px 12px;
-    width: fit-content;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  .button-style:hover {
-    background-color: var(--green);
-    color: white;
-  }
+	.subtitle {
+		font-size: 0.75rem;
+		font-weight: 590;
+		color: var(--subtitle-text);
+	}
+	.card-style {
+		border: 0.6px solid var(--stroke);
+		background-color: var(--foreground);
+		border-radius: 10px;
+		box-shadow: -4px 2px 10px rgba(0, 0, 0, 0.01);
+		transition:
+			background-color 0.3s,
+			color 0.3s;
+	}
+	.button-style {
+		border: 0.6px solid var(--stroke);
+		background-color: var(--foreground);
+		border-radius: 8px;
+		cursor: pointer;
+		padding: 8px 12px;
+		width: fit-content;
+		transition:
+			background-color 0.3s,
+			color 0.3s;
+	}
+	.button-style:hover {
+		background-color: var(--green);
+		color: white;
+	}
 
-  .restaurant-card {
-    padding: 1rem;
-    width: 250px;
-    height: 202px;
-    width: 327px;
-  }
+	.restaurant-card {
+		padding: 1rem;
+		width: 250px;
+		height: 202px;
+		width: 327px;
+	}
 
-  .restaurant-card:hover {
-    background-color: var(--green);
-  }
+	.restaurant-card:hover {
+		background-color: var(--green);
+	}
 
-  .info-tags {
-    border: 0.6px solid var(--stroke);
-    background-color: var(--foreground);
-    border-radius: 88px;
-    padding: 8px 12px;
-    width: fit-content;
-  }
+	.info-tags {
+		border: 0.6px solid var(--stroke);
+		background-color: var(--foreground);
+		border-radius: 88px;
+		padding: 8px 12px;
+		width: fit-content;
+	}
 
-  .closed-status {
-    background-color: var(--closed-status-background-color);
-  }
-  .closed-span {
-    border: 0.6px solid var(--stroke);
-    background-color: var(--background);
-    border-radius: 4px;
-    padding: 8px 10px;
-    width: fit-content;
-  }
+	.closed-status {
+		background-color: var(--closed-status-background-color);
+	}
+	.closed-span {
+		border: 0.6px solid var(--stroke);
+		background-color: var(--background);
+		border-radius: 4px;
+		padding: 8px 10px;
+		width: fit-content;
+	}
 }
 
 @layer utilities {
-  @media (min-width: 640px) {
-    .card-style-nav {
-      border: 0.6px solid var(--stroke);
-      background-color: var(--foreground);
-      border-radius: 10px;
-      box-shadow: -4px 2px 10px rgba(0, 0, 0, 0.01);
-      transition: background-color 0.3s, color 0.3s;
-    }
-  }
+	@media (min-width: 640px) {
+		.card-style-nav {
+			border: 0.6px solid var(--stroke);
+			background-color: var(--foreground);
+			border-radius: 10px;
+			box-shadow: -4px 2px 10px rgba(0, 0, 0, 0.01);
+			transition:
+				background-color 0.3s,
+				color 0.3s;
+		}
+	}
 }
