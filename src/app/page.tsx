@@ -1,7 +1,7 @@
 import Image from "next/image";
 import FilterNavBar from "./components/FilterNavBar";
 import FilterFoodCategory from "./components/FilterFoodCategory";
-import RestaurantCards from "./components/RestaurantCards";
+import RestaurantLayout from "./components/restaurant/RestaurantLayout";
 import { PriceRange, Filter } from "./types";
 import {
   fetchRestaurants,
@@ -95,18 +95,11 @@ export default async function Home({ searchParams }: PageProps) {
 
   return (
     <main className="min-h-screen h-screen py-10 pl-6 overflow-y-hidden sm:pl-10 sm:py-10 sm:pl-10 max-w-[1440px] items-center ">
-      <Image
-        src="/images/munchies-logo.png"
-        alt="Munchies Logo"
-        width={250}
-        height={40}
-        className="mb-6 sm:mb-12 w-41 sm:62 dark:invert"
-      />
       <div className="sm:flex h-full w-full gap-5 ">
         <FilterNavBar filters={filters} />
         <div className="sm:w-5/6 h-full flex flex-col">
           <FilterFoodCategory filters={filters} />
-          <RestaurantCards 
+          <RestaurantLayout
             restaurants={filteredRestaurants}
             status={statusMap}
           />
