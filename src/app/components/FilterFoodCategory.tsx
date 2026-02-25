@@ -1,32 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
 import { Filter } from "../types";
+import { useFilterParam } from "../hooks/useFilterParam";
 
 export default function FilterFoodCategory({ filters }: { filters: Filter[] }) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const selectedCategories =
-    searchParams
-      .get("category")
-      ?.split(",")
-      .map((c) => c.toLowerCase()) || [];
-
-  const handleCategoryClick = (category: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    let categories = params.get("category")?.split(",") || [];
-    if (categories.includes(category)) {
-      categories = categories.filter((c) => c !== category);
-    } else {
-      categories.push(category);
-    }
-    categories.length > 0
-      ? params.set("category", categories.join(","))
-      : params.delete("category");
-    router.push(`/?${params.toString()}`);
-  };
+  const [selectedCategories, toggleCategory] = useFilterParam("category");
 
   return (
     <nav className="flex h-20 min-h-20 w-full gap-2.5 items-center overflow-x-scroll  text-sm ">
@@ -39,7 +18,7 @@ export default function FilterFoodCategory({ filters }: { filters: Filter[] }) {
                 ? "bg-[var(--green)] text-white"
                 : ""
             }`}
-            onClick={() => handleCategoryClick(filter.name.toLowerCase())}
+            onClick={() => toggleCategory(filter.name.toLowerCase())}
           >
             <h3 className="pt-4 pl-3">{filter.name}</h3>
             <Image
